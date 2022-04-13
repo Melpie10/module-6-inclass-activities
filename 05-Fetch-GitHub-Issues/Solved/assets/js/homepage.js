@@ -1,4 +1,4 @@
-var userFormEl = document.querySelector('#user-form');
+var userFormEl = document.querySelector('#coderForm');
 var languageButtonsEl = document.querySelector('#language-buttons');
 var nameInputEl = document.querySelector('#username');
 var repoContainerEl = document.querySelector('#repos-container');
@@ -98,6 +98,59 @@ var displayRepos = function (repos, searchTerm) {
     repoContainerEl.appendChild(repoEl);
   }
 };
+
+var coderForm = document.getElementById("coderForm");
+var codersContainer = document.querySelector(".coders");
+
+var nameInput = coderForm["username"];
+var coders = JSON.parse(localStorage.getItem("coders")) || [];
+
+var addCoder = (name) => {
+  coders.push({
+    name
+  });
+
+  localStorage.setItem("coders", JSON.stringify(coders));
+
+  return { name };
+};
+
+var createCoderElement = ({ name }) => {
+  // Create elements
+  var coderDiv = document.createElement("div");
+  var coderName = document.createElement("h2");
+
+
+  // Fill the content
+  coderName.innerText =  name;
+
+
+  // Add to the DOM
+  coderDiv.append(coderName);
+  codersContainer.appendChild(coderDiv);
+
+  codersContainer.style.display = coders.length === 0 ? "none" : "flex";
+};
+
+codersContainer.style.display = coders.length === 0 ? "none" : "flex";
+
+coders.forEach(createCoderElement);
+
+coderForm.onsubmit = e => {
+  e.preventDefault();
+
+  var newCoder = addCoder(
+    nameInput.value,
+
+  );
+
+  createCoderElement(newCoder);
+
+  nameInput.value = "";
+
+};
+
+
 
 userFormEl.addEventListener('submit', formSubmitHandler);
 languageButtonsEl.addEventListener('click', buttonClickHandler);
